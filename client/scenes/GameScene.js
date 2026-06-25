@@ -130,12 +130,15 @@ export default class GameScene extends Phaser.Scene {
     this.hud = {
       hp:     monospaceHud(16, 16,  'HP: 100',      '#0f0'),
       dist:   monospaceHud(16, 36,  'DIST: 0m',     '#ff0'),
-      ammo:   monospaceHud(16, 56,  'AMMO: 15/999', '#0ff'),
-      gren:   monospaceHud(16, 76,  'GREN: 3',      '#f80'),
-      gun:    monospaceHud(16, 96,  'GUN: PISTOL',  '#fff'),
-      shield: monospaceHud(16, 116, '',             '#fd0'),
-      reload: this.add.text(16, 136, '', { fontSize: '18px', fill: '#ff4', fontFamily: 'monospace', fontStyle: 'bold' }).setScrollFactor(0).setDepth(20),
+      gren:   monospaceHud(16, 56,  'GREN: 3',      '#f80'),
+      gun:    monospaceHud(16, 76,  'GUN: PISTOL',  '#fff'),
+      shield: monospaceHud(16, 96,  '',             '#fd0'),
+      reload: this.add.text(16, 116, '', { fontSize: '18px', fill: '#ff4', fontFamily: 'monospace', fontStyle: 'bold' }).setScrollFactor(0).setDepth(20),
       keys:   monospaceHud(16, 500, 'Z후진 C전진 X방패 F수류탄 D재장전', '#666'),
+      ammo:   this.add.text(W - 16, H - 16, 'AMMO: 15/999', {
+        fontSize: '28px', fill: '#00ffff', fontFamily: 'monospace', fontStyle: 'bold',
+        stroke: '#000000', strokeThickness: 4,
+      }).setOrigin(1, 1).setScrollFactor(0).setDepth(20),
     };
 
     this.input.keyboard.on('keydown-D',   () => this.startReload());
@@ -277,6 +280,9 @@ export default class GameScene extends Phaser.Scene {
           this.lastBoxDistance = this.distance;
           this.spawnBox();
         }
+        // 거리에 따라 스폰 간격 감소: 0m=2000ms → 2000m=600ms
+        const spawnDelay = Math.max(600, 2000 - this.distance * 0.7);
+        this.spawnTimer.delay = spawnDelay;
       }
     }
 

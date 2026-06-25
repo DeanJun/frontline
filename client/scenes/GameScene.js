@@ -10,7 +10,7 @@ const GUNS = {
   pistol:   { name: 'PISTOL',   magSize: 15,  reserve: 999, spread: 0.06, damage: 10, pellets: 1, bulletSpeed: 1200, autoFire: false },
   shotgun:  { name: 'SHOTGUN',  magSize: 6,   reserve: 30,  spread: 0.30, damage: 15, pellets: 6, bulletSpeed: 960,  autoFire: false },
   smg:      { name: 'SMG',      magSize: 30,  reserve: 120, spread: 0.13, damage: 6,  pellets: 1, bulletSpeed: 1120, autoFire: true  },
-  sniper:   { name: 'SNIPER',   magSize: 5,   reserve: 20,  spread: 0,    damage: 50, pellets: 1, bulletSpeed: 1900, autoFire: false },
+  sniper:   { name: 'SNIPER',   magSize: 5,   reserve: 20,  spread: 0,    damage: 5,  pellets: 1, bulletSpeed: 1900, autoFire: false },
   minigun:  { name: 'MINIGUN',  magSize: 100, reserve: 0,   spread: 0.10, damage: 8,  pellets: 1, bulletSpeed: 1300, autoFire: true,  hidden: true },
   launcher: { name: 'LAUNCHER', magSize: 3,   reserve: 9,   spread: 0.04, damage: 0,  pellets: 1, bulletSpeed: 680,  autoFire: false, hidden: true, explosive: true, explodeRadius: 90,  explodeDmg: 60  },
   bazooka:  { name: 'BAZOOKA',  magSize: 1,   reserve: 4,   spread: 0,    damage: 0,  pellets: 1, bulletSpeed: 900,  autoFire: false, hidden: true, explosive: true, explodeRadius: 250, explodeDmg: 150 },
@@ -837,7 +837,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     if (isHeadshot) {
-      this.damageEnemy(enemy, (bullet._damage || 10) * 10, bulletAngle, true);
+      const hsMulti = bullet._isSniper ? 8 : 10;
+      this.damageEnemy(enemy, (bullet._damage || 10) * hsMulti, bulletAngle, true);
       this.showFloatingText(enemy.x, enemy.y - enemy.height / 2 - 10, 'HEADSHOT!', '#ffee00');
     } else {
       this.damageEnemy(enemy, bullet._damage || 10, bulletAngle, false);

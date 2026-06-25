@@ -11,7 +11,7 @@ const GUNS = {
   shotgun:  { name: 'SHOTGUN',  magSize: 6,   reserve: 30,  spread: 0.30, damage: 4,  pellets: 6, bulletSpeed: 960,  autoFire: false },
   smg:      { name: 'SMG',      magSize: 30,  reserve: 120, spread: 0.13, damage: 3,  pellets: 1, bulletSpeed: 1120, autoFire: true  },
   sniper:   { name: 'SNIPER',   magSize: 5,   reserve: 20,  spread: 0,    damage: 5,  pellets: 1, bulletSpeed: 1900, autoFire: false },
-  minigun:  { name: 'MINIGUN',  magSize: 100, reserve: 0,   spread: 0.10, damage: 5,  pellets: 1, bulletSpeed: 1300, autoFire: true,  hidden: true },
+  minigun:  { name: 'MINIGUN',  magSize: 300, reserve: 0,   spread: 0.10, damage: 5,  pellets: 1, bulletSpeed: 1300, autoFire: true,  hidden: true },
   launcher: { name: 'LAUNCHER', magSize: 3,   reserve: 9,   spread: 0.04, damage: 0,  pellets: 1, bulletSpeed: 680,  autoFire: false, hidden: true, explosive: true, explodeRadius: 90,  explodeDmg: 60  },
   bazooka:  { name: 'BAZOOKA',  magSize: 1,   reserve: 4,   spread: 0,    damage: 0,  pellets: 1, bulletSpeed: 900,  autoFire: false, hidden: true, explosive: true, explodeRadius: 250, explodeDmg: 150 },
 };
@@ -265,7 +265,7 @@ export default class GameScene extends Phaser.Scene {
 
       if (GUNS[this.currentGun].autoFire && ptr.isDown && !this.shielding && !this.reloading && this.mag > 0) {
         this.smgFireTimer -= delta;
-        const fireInterval = this.currentGun === 'minigun' ? 17 : 80;
+        const fireInterval = this.currentGun === 'minigun' ? 50 : 80;
         if (this.smgFireTimer <= 0) {
           this.smgFireTimer = fireInterval;
           this.fireBullet(ptr);

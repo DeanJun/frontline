@@ -101,5 +101,18 @@ export default class MenuScene extends Phaser.Scene {
         fontStyle: 'bold',
       }).setOrigin(0.5);
     });
+
+    // 우측 하단 크레딧
+    this.add.text(width - 16, height - 28, 'Made by. Jun Ho Seong.', {
+      fontSize: '12px', fill: '#aaaaaa', fontFamily: 'monospace',
+    }).setOrigin(1, 0.5);
+
+    const seeProfile = this.add.text(width - 16, height - 12, 'See profile', {
+      fontSize: '12px', fill: '#66aaff', fontFamily: 'monospace',
+    }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+
+    seeProfile.on('pointerover', () => seeProfile.setStyle({ fill: '#aaccff', fontStyle: 'underline' }));
+    seeProfile.on('pointerout',  () => seeProfile.setStyle({ fill: '#66aaff', fontStyle: 'normal' }));
+    seeProfile.on('pointerdown', () => window.open('https://junhoseong.com', '_blank'));
   }
 }

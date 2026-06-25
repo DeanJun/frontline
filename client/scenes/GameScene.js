@@ -613,8 +613,8 @@ export default class GameScene extends Phaser.Scene {
       }
     }
 
-    const shakeMap = { bazooka: 0.010, sniper: 0.018, shotgun: 0.005 };
-    this.cameras.main.shake(60, shakeMap[this.currentGun] ?? 0.002);
+    const shakeMap = { bazooka: 0.020, sniper: 0.036, shotgun: 0.010 };
+    this.cameras.main.shake(60, shakeMap[this.currentGun] ?? 0.004);
 
     const wp = this.worldPointer(ptr);
     const baseAngle = Phaser.Math.Angle.Between(this.player.x, this.player.y, wp.x, wp.y);

@@ -1,6 +1,8 @@
 import { Socket, S2C } from '../net/Socket.js';
 
-const WS_URL = `ws://${location.hostname}:3000`;
+const WS_URL = location.protocol === 'https:'
+  ? `wss://${location.hostname}/ws`
+  : `ws://${location.hostname}:3000`;
 
 export default class MenuScene extends Phaser.Scene {
   constructor() { super('MenuScene'); }

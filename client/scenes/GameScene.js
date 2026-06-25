@@ -640,12 +640,46 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
+    if (this.currentGun === 'sniper') {
+      // 즉각 관통 레이캐스트
+      const ox = this.player.x, oy = this.player.y;
+      const range = 2400;
+      const ex = ox + Math.cos(baseAngle) * range;
+      const ey = oy + Math.sin(baseAngle) * range;
+
+      // 레이저 이펙트
+      const laser = this.add.graphics().setDepth(9);
+      laser.lineStyle(2, 0xffffff, 0.9);
+      laser.beginPath();
+      laser.moveTo(ox, oy);
+      laser.lineTo(ex, ey);
+      laser.strokePath();
+      this.time.delayedCall(80, () => laser.destroy());
+
+      // 라인 위 모든 적 판정
+      this.enemies.getChildren().slice().forEach(e => {
+        if (!e.active) return;
+        const closest = Phaser.Geom.Line.GetNearestPoint(
+          new Phaser.Geom.Line(ox, oy, ex, ey),
+          new Phaser.Math.Vector2(e.x, e.y)
+        );
+        const dist = Phaser.Math.Distance.Between(closest.x, closest.y, e.x, e.y);
+        if (dist <= e.width * 0.7) {
+          const isHeadshot = e.y - e.height * 0.35 >= oy + Math.sin(baseAngle) * Phaser.Math.Distance.Between(ox, oy, e.x, e.y) - e.height * 0.15;
+          const hs = dist <= e.width * 0.35 && e.y - e.height * 0.5 + e.height * 0.15 >= oy + Math.sin(baseAngle) * Phaser.Math.Distance.Between(ox, oy, e.x, e.y);
+          const dmg = hs ? gun.damage * 10 : gun.damage;
+          if (hs) this.showFloatingText(e.x, e.y - e.height / 2 - 10, 'HEADSHOT!', '#ffee00');
+          this.damageEnemy(e, dmg, baseAngle, hs);
+        }
+      });
+      return;
+    }
+
     for (let i = 0; i < gun.pellets; i++) {
       const angle = baseAngle + (Math.random() - 0.5) * gun.spread;
       const b = this.add.rectangle(this.player.x, this.player.y, 8, 4, 0xffff00);
       b.setRotation(angle);
-      b._damage   = gun.damage;
-      b._isSniper = this.currentGun === 'sniper';
+      b._damage = gun.damage;
       this.physics.add.existing(b);
       this.bullets.add(b);
       b.body.setVelocity(Math.cos(angle) * gun.bulletSpeed, Math.sin(angle) * gun.bulletSpeed);
@@ -827,14 +861,7 @@ export default class GameScene extends Phaser.Scene {
   onBulletHitEnemy(bullet, enemy) {
     const bulletAngle = Math.atan2(bullet.body.velocity.y, bullet.body.velocity.x);
     const isHeadshot  = bullet.y <= (enemy.y - enemy.height / 2) + enemy.height * 0.15;
-
-    if (bullet._isSniper) {
-      if (!bullet._hitEnemies) bullet._hitEnemies = new Set();
-      if (bullet._hitEnemies.has(enemy)) return;
-      bullet._hitEnemies.add(enemy);
-    } else {
-      bullet.destroy();
-    }
+    bullet.destroy();
 
     if (isHeadshot) {
       this.damageEnemy(enemy, (bullet._damage || 10) * 10, bulletAngle, true);

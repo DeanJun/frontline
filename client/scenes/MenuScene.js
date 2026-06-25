@@ -103,16 +103,20 @@ export default class MenuScene extends Phaser.Scene {
     });
 
     // 우측 하단 크레딧
-    this.add.text(width - 16, height - 28, 'Made by. Jun Ho Seong.', {
-      fontSize: '12px', fill: '#aaaaaa', fontFamily: 'monospace',
+    this.add.text(width - 16, height - 44, 'Made by. Jun Ho Seong.', {
+      fontSize: '18px', fill: '#ffffff', fontFamily: 'monospace', fontStyle: 'bold',
     }).setOrigin(1, 0.5);
 
-    const seeProfile = this.add.text(width - 16, height - 12, 'See profile', {
-      fontSize: '12px', fill: '#66aaff', fontFamily: 'monospace',
+    const seeProfile = this.add.text(width - 16, height - 18, 'See profile', {
+      fontSize: '18px', fill: '#0055ff', fontFamily: 'monospace', fontStyle: 'bold',
     }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
 
-    seeProfile.on('pointerover', () => seeProfile.setStyle({ fill: '#aaccff', fontStyle: 'underline' }));
-    seeProfile.on('pointerout',  () => seeProfile.setStyle({ fill: '#66aaff', fontStyle: 'normal' }));
+    // 밑줄 직접 그리기
+    const spBounds = seeProfile.getBounds();
+    const underline = this.add.rectangle(spBounds.centerX, spBounds.bottom + 2, spBounds.width, 2, 0x0055ff);
+
+    seeProfile.on('pointerover', () => { seeProfile.setStyle({ fill: '#4488ff' }); underline.setFillStyle(0x4488ff); });
+    seeProfile.on('pointerout',  () => { seeProfile.setStyle({ fill: '#0055ff' }); underline.setFillStyle(0x0055ff); });
     seeProfile.on('pointerdown', () => window.open('https://junhoseong.com', '_blank'));
   }
 }

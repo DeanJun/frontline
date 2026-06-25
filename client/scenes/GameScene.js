@@ -837,8 +837,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     if (isHeadshot) {
-      const hsMulti = bullet._isSniper ? 8 : 10;
-      this.damageEnemy(enemy, (bullet._damage || 10) * hsMulti, bulletAngle, true);
+      this.damageEnemy(enemy, (bullet._damage || 10) * 10, bulletAngle, true);
       this.showFloatingText(enemy.x, enemy.y - enemy.height / 2 - 10, 'HEADSHOT!', '#ffee00');
     } else {
       this.damageEnemy(enemy, bullet._damage || 10, bulletAngle, false);

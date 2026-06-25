@@ -588,6 +588,7 @@ export default class GameScene extends Phaser.Scene {
       this.reloading = false;
       this.hud.ammo.setText(`AMMO: ${this.mag}/${this.reserve}`);
       this.hud.reload.setText('');
+      this.hideCenterAlert();
     });
   }
 
@@ -599,6 +600,7 @@ export default class GameScene extends Phaser.Scene {
     if (this.mag === 0) {
       if (this.reserve > 0) {
         this.hud.reload.setText('[ D ] RELOAD');
+        this.showCenterAlert('Out of ammo  Press [ D ] to reload');
       } else if (this.currentGun !== 'pistol') {
         this.equipGun('pistol');
         this.showFloatingText(this.player.x, this.player.y - 40, '권총으로 교체', '#aaaaaa');
@@ -871,6 +873,28 @@ export default class GameScene extends Phaser.Scene {
       }
       enemy.destroy();
     }
+  }
+
+  showCenterAlert(text) {
+    if (this._centerAlert) { this._centerAlert.destroy(); this._centerAlert = null; }
+    const cx = this.scale.width / 2;
+    const cy = this.scale.height / 2;
+    this._centerAlert = this.add.text(cx, cy, text, {
+      fontSize: '22px', fill: '#ff4444', fontFamily: 'monospace', fontStyle: 'bold',
+      stroke: '#000000', strokeThickness: 4,
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(25);
+
+    this.tweens.add({
+      targets: this._centerAlert,
+      alpha: { from: 1, to: 0.3 },
+      duration: 400,
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+
+  hideCenterAlert() {
+    if (this._centerAlert) { this._centerAlert.destroy(); this._centerAlert = null; }
   }
 
   showFloatingText(x, y, text, color) {

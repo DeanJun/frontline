@@ -613,7 +613,7 @@ export default class GameScene extends Phaser.Scene {
       }
     }
 
-    const shakeMap = { bazooka: 0.010, sniper: 0.006, shotgun: 0.005 };
+    const shakeMap = { bazooka: 0.010, sniper: 0.018, shotgun: 0.005 };
     this.cameras.main.shake(60, shakeMap[this.currentGun] ?? 0.002);
 
     const wp = this.worldPointer(ptr);
@@ -659,18 +659,19 @@ export default class GameScene extends Phaser.Scene {
       // 라인 위 모든 적 판정
       this.enemies.getChildren().slice().forEach(e => {
         if (!e.active) return;
-        const closest = Phaser.Geom.Line.GetNearestPoint(
-          new Phaser.Geom.Line(ox, oy, ex, ey),
-          new Phaser.Math.Vector2(e.x, e.y)
-        );
-        const dist = Phaser.Math.Distance.Between(closest.x, closest.y, e.x, e.y);
-        if (dist <= e.width * 0.7) {
-          const isHeadshot = e.y - e.height * 0.35 >= oy + Math.sin(baseAngle) * Phaser.Math.Distance.Between(ox, oy, e.x, e.y) - e.height * 0.15;
-          const hs = dist <= e.width * 0.35 && e.y - e.height * 0.5 + e.height * 0.15 >= oy + Math.sin(baseAngle) * Phaser.Math.Distance.Between(ox, oy, e.x, e.y);
-          const dmg = hs ? gun.damage * 10 : gun.damage;
-          if (hs) this.showFloatingText(e.x, e.y - e.height / 2 - 10, 'HEADSHOT!', '#ffee00');
-          this.damageEnemy(e, dmg, baseAngle, hs);
-        }
+        // 적 X에서 레이의 Y값 계산
+        const t = (e.x - ox) / (ex - ox);
+        if (t < 0 || t > 1) return;
+        const rayY = oy + Math.sin(baseAngle) * (t * range);
+        const eTop = e.y - e.height / 2;
+        const eBot = e.y + e.height / 2;
+        if (rayY < eTop || rayY > eBot) return;
+
+        // 상단 20% = 헤드샷
+        const hs = rayY <= eTop + e.height * 0.20;
+        const dmg = hs ? gun.damage * 10 : gun.damage;
+        if (hs) this.showFloatingText(e.x, eTop - 10, 'HEADSHOT!', '#ffee00');
+        this.damageEnemy(e, dmg, baseAngle, hs);
       });
       return;
     }

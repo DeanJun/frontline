@@ -7,11 +7,11 @@ const MINI_BOSS_INTERVAL = 500;
 const BOSS_INTERVAL = 2000;
 
 const GUNS = {
-  pistol:   { name: 'PISTOL',   magSize: 15,  reserve: 999, spread: 0.06, damage: 10, pellets: 1, bulletSpeed: 1200, autoFire: false },
-  shotgun:  { name: 'SHOTGUN',  magSize: 6,   reserve: 30,  spread: 0.30, damage: 15, pellets: 6, bulletSpeed: 960,  autoFire: false },
-  smg:      { name: 'SMG',      magSize: 30,  reserve: 120, spread: 0.13, damage: 6,  pellets: 1, bulletSpeed: 1120, autoFire: true  },
+  pistol:   { name: 'PISTOL',   magSize: 15,  reserve: 999, spread: 0.06, damage: 5,  pellets: 1, bulletSpeed: 1200, autoFire: false },
+  shotgun:  { name: 'SHOTGUN',  magSize: 6,   reserve: 30,  spread: 0.30, damage: 4,  pellets: 6, bulletSpeed: 960,  autoFire: false },
+  smg:      { name: 'SMG',      magSize: 30,  reserve: 120, spread: 0.13, damage: 3,  pellets: 1, bulletSpeed: 1120, autoFire: true  },
   sniper:   { name: 'SNIPER',   magSize: 5,   reserve: 20,  spread: 0,    damage: 5,  pellets: 1, bulletSpeed: 1900, autoFire: false },
-  minigun:  { name: 'MINIGUN',  magSize: 100, reserve: 0,   spread: 0.10, damage: 8,  pellets: 1, bulletSpeed: 1300, autoFire: true,  hidden: true },
+  minigun:  { name: 'MINIGUN',  magSize: 100, reserve: 0,   spread: 0.10, damage: 5,  pellets: 1, bulletSpeed: 1300, autoFire: true,  hidden: true },
   launcher: { name: 'LAUNCHER', magSize: 3,   reserve: 9,   spread: 0.04, damage: 0,  pellets: 1, bulletSpeed: 680,  autoFire: false, hidden: true, explosive: true, explodeRadius: 90,  explodeDmg: 60  },
   bazooka:  { name: 'BAZOOKA',  magSize: 1,   reserve: 4,   spread: 0,    damage: 0,  pellets: 1, bulletSpeed: 900,  autoFire: false, hidden: true, explosive: true, explodeRadius: 250, explodeDmg: 150 },
 };
